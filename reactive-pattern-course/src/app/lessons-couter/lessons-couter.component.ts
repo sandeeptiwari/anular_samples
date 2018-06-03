@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { globalEventBus, LESSONS_LIST_AVAILABLE, ADD_NEW_LESSON } from '../event-bus-experiment/event-bus';
-import { Observer } from './../event-bus-experiment/event-bus';
 import { Lesson } from './../shared/model/lesson';
+import { lessonList$ } from '../event-bus-experiment/app-data';
+import { Observer } from './../event-bus-experiment/app-data';
 
 @Component({
   selector: 'app-lessons-couter',
@@ -13,17 +13,14 @@ export class LessonsCouterComponent implements OnInit, Observer {
   lessonCounter : number = 0;
 
   constructor() { 
-    globalEventBus.registerObserver(LESSONS_LIST_AVAILABLE, this);
-
-    globalEventBus.registerObserver(ADD_NEW_LESSON, {
-      notify : lessonText => this.lessonCounter += 1
-    });
+    lessonList$.subscribe(this);
+    
   }
 
   ngOnInit() {
   }
 
-  notify(data: Lesson[]) {
+  next(data: Lesson[]) {
     this.lessonCounter = data.length;
   }
 
