@@ -1,7 +1,7 @@
 <table class="table lesson-list card card-strong">
   <tbody>
     <tr *ngFor="let lesson of lessons">
-      <td class="viewed"><input type="checkbox" (click)="toggleLessonViewed(lesson)"></td>
+      <td class="viewed"><input type="checkbox" [checked]="lesson.complete" (click)="toggleLessonViewed(lesson)"></td>
       <td class="lesson-title">{{lesson.description}}</td>
       <!-- <td class="duration">
         <i class="md-icon duration-icon">access_time</i>

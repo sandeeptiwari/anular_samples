@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Lesson } from './../shared/model/lesson';
 import * as _ from 'lodash';
-import { Observer, lessonList$ } from './../event-bus-experiment/app-data';
+import { Observer, store} from './../event-bus-experiment/app-data';
 
 @Component({
   selector: 'app-lessons-list',
@@ -14,20 +14,11 @@ export class LessonsListComponent implements Observer {
 
   constructor() {
     console.log("Register LessonList observer");
-    lessonList$.subscribe(this);
-
-    // lessonList$.subscribe({
-    //     next: lessonText => {
-    //       this.lessons.push({
-    //         id: Math.random(),
-    //         description:lessonText
-    //       })
-    //     }
-    // });
+    store.lessonList$.subscribe(this);
    }
 
    toggleLessonViewed(lesson:Lesson){
-    lesson.complete = !lesson.complete;
+      store.toggleLessonViewed(lesson);
    }
 
   next(data: Lesson[]) {
@@ -36,6 +27,6 @@ export class LessonsListComponent implements Observer {
   }
 
   delete(deleted:Lesson){
-    _.remove(this.lessons, lesson => lesson.id === deleted.id );
+    store.deleteLesson(deleted);
   }
 }

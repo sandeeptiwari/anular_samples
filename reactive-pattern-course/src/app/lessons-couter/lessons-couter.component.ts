@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Lesson } from './../shared/model/lesson';
-import { lessonList$ } from '../event-bus-experiment/app-data';
-import { Observer } from './../event-bus-experiment/app-data';
+import { Observer, store} from './../event-bus-experiment/app-data';
 
 @Component({
   selector: 'app-lessons-couter',
@@ -13,7 +12,7 @@ export class LessonsCouterComponent implements OnInit, Observer {
   lessonCounter : number = 0;
 
   constructor() { 
-    lessonList$.subscribe(this);
+    store.lessonList$.subscribe(this);
     
   }
 

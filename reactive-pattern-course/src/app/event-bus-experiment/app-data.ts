@@ -30,18 +30,46 @@ class SubjectImpl implements Subject {
     }
 }
 
-const lessonListSubject = new SubjectImpl();
-export let lessonList$ : Observable = {
-    subscribe : obs => {
-        lessonListSubject.subscribe(obs);
-        obs.next(lesson);
-    },
-    unsubscribe:obs => lessonListSubject.unsubscribe(obs)
-};
 
-let lesson : Lesson[] = [];
+class DataStore {
+    private lessons : Lesson[] = [];
 
-export function initializeLesson(newList : Lesson[]){
-    lesson = _.cloneDeep(newList);
-    lessonListSubject.next(lesson);
+    private  lessonListSubject = new SubjectImpl();
+
+    public lessonList$ : Observable = {
+        subscribe : obs => {
+            this.lessonListSubject.subscribe(obs);
+            obs.next(this.lessons);
+        },
+        unsubscribe:obs => this.lessonListSubject.unsubscribe(obs)
+    };
+
+    initializeLessonList(newList: Lesson[]){
+        this.lessons = _.cloneDeep(newList);
+        this.broadcast();
+    }
+
+    addLesson(lesson: Lesson): void {
+        this.lessons.push(_.cloneDeep(lesson));
+        this.broadcast();
+      }
+
+      deleteLesson(deleted: Lesson){
+        _.remove(this.lessons, 
+            lesson => lesson.id === deleted.id);
+            this.broadcast();
+      }
+
+      toggleLessonViewed(toggled : Lesson){
+        const lesson = _.find(this.lessons, lesson => lesson.id === toggled.id);
+        lesson.complete = !lesson.complete;
+        this.broadcast();
+      }
+
+      broadcast(){
+        this.lessonListSubject.next(_.cloneDeep(this.lessons));
+        
+      }
 }
+
+export const store = new DataStore();
