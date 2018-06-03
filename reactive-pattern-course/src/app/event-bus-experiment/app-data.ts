@@ -31,18 +31,19 @@ class SubjectImpl implements Subject {
 }
 
 
-class DataStore {
+class DataStore implements Observable {
+    
     private lessons : Lesson[] = [];
 
     private  lessonListSubject = new SubjectImpl();
 
-    public lessonList$ : Observable = {
-        subscribe : obs => {
-            this.lessonListSubject.subscribe(obs);
-            obs.next(this.lessons);
-        },
-        unsubscribe:obs => this.lessonListSubject.unsubscribe(obs)
-    };
+    subscribe(obs: Observer) {
+        this.lessonListSubject.subscribe(obs);
+        obs.next(this.lessons);
+    }
+    unsubscribe(obs: Observer) {
+        this.lessonListSubject.unsubscribe(obs);
+    }
 
     initializeLessonList(newList: Lesson[]){
         this.lessons = _.cloneDeep(newList);

@@ -12,7 +12,7 @@ export class LessonsCouterComponent implements OnInit, Observer {
   lessonCounter : number = 0;
 
   constructor() { 
-    store.lessonList$.subscribe(this);
+    store.subscribe(this);
     
   }
 

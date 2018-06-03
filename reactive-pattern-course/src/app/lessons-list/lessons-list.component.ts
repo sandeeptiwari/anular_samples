@@ -14,7 +14,7 @@ export class LessonsListComponent implements Observer {
 
   constructor() {
     console.log("Register LessonList observer");
-    store.lessonList$.subscribe(this);
+    store.subscribe(this);
    }
 
    toggleLessonViewed(lesson:Lesson){
